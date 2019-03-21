@@ -56,3 +56,49 @@
   })
   export class ServersComponent{}
   ```
+## 1.6 Component Styling
+- `styleUrls` is an array of external stylesheets that define the style for your component.
+- you can also use inline styles with the `styles` property.
+  ```ts
+  @Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  //styleUrls: ['./app.component.css']
+  styles: [`
+    h3 {
+      color: dodgerblue;
+    }
+  `]
+  })
+  export class AppComponent {
+    name = '';
+  }
+  ```
+- A component must have only one template, either inline or external.
+- It can have multiple styles.
+## 1.7 Component Selector
+- must be unique to not override another component.
+- the selector field of a component's metadata works exactly like CSS selectors.
+- this means that it's not mandatory to use an element selector. One can also use an attribute selector by enclosing the selector in `[app-selector]` or by class with a `.` in front of it.
+  ```ts
+  @Component({
+  //selector: 'app-servers',
+  //selector: '[app-servers]',
+  selector: '.app-servers',
+  template: `
+    <app-server></app-server>
+    <app-server></app-server>
+  `,
+  styleUrls: ['./servers.component.css']
+  })
+  export class ServersComponent
+  ```
+  ```html
+      <div class="col-xs-12">
+            <!-- <app-servers></app-servers> -->
+            <!-- <div app-servers></div> -->
+            <div class="app-servers"></div>
+        </div>
+  ```
+  - this would essentially work the same.
+  - for components, we typically use element selectors.
