@@ -102,3 +102,83 @@
   ```
   - this would essentially work the same.
   - for components, we typically use element selectors.
+## 1.8 Databinding overview
+- Databinding is the shuttling of data between TS code and HTML template.
+- To output data from TS to HTML, we use:
+  - String interpolation : `{{ data }}`
+  - Property binding : `[property] = "data"`
+- For HTML to TS communication, we can react to user events using event binding `(event)="expression"`.
+- Two way data binding `[(ngModel)]="data"`
+## 1.9 String Interpolation
+- `{{ value/expression }}`
+- String interpolation can contain any expression that can evaluate to a string in the end.
+- no multiline expressions. No if-else, use ternary operators instead.
+## 1.10 Property Binding
+- Square brackets indicate that we are using property binding. This tells Angular to evaluate the value of an attribute as a typescript expression.
+- `<button [disbaled]="isButtonDisabled()" >Test</button>`
+- We can also bind to the `innerText` property of an element instead of using string interpolation:
+  ```html
+  <p> {{ someValue }} </p>
+  <p [innerText]="someValue"></p>
+  ```
+  - these are equivalent in functionality.
+## 1.11 Event Binding
+- parantheses enclose an event. The value is a javascript expression.
+    ```ts
+    <button class="btn btn-primary"
+    [disabled]="!allowNewServer"
+    (click)="onCreateServer()"> Add Servers </button>
+    ```
+- can also pass event data to the event handler function using `$event`. `$event` is a reserved variable name for data passed through an event.
+    ```ts
+    onUpdateServerName(event: Event){
+      this.serverName = (<HTMLInputElement>event.target).value;
+    }
+    ```
+    ```html
+    <input type="text" class="form-control" (input)="onUpdateServerName($event)">
+    ```
+## 1.12 Two-way-databinding
+- Combination of property binding and event binding, with the use of the ngModel directive.
+```html
+<input type="text" class="form-control" [(ngModel)]="serverName">
+<p>{{ serverName }}</p>
+```
+- will also change the value of the input element if the value of the model in TS changes.
+## 1.13 Directives 
+- Directives: instructions for the DOM
+  - Components = directives + template
+  - Structural directives = change the DOM layout by adding or removing elements
+  - attribute directives = change the appearance or functionality of DOM elements
+- Use `@Directive` decorator to define a custom directive.
+## 1.14 ngIf
+- `*ngIf` is used as the attribute.
+- * at the beginning indicates it is a structural directive.
+- it is a structural directive since it changes whether an element should be added to the DOM or not.
+- its value should be an expression returning a boolean value.
+- `<p *ngIf="serverCreated"> Server was created. Server name is: {{ serverName }} </p>`
+- `serverCreated : boolean = false;`
+## 1.15 else for ngIf
+```html
+<p *ngIf="serverCreated; else noServer"> Server was created. Server name is: {{ serverName }} </p>
+<ng-template #noServer>
+    <p> No Server was created. </p>
+</ng-template>
+```
+## 1.16 ngStyle
+- attribute directive. Without * in it.
+- need to give it a value, so we will need to bind it to a js expression.
+- `[ngStyle]="{backgroundColor: getColor()}"`. Square brackets indicate that we are binding to the ngStyle property on the ngStyle directive.
+- The property expects a js object, where keys are the styles to apply and values are their values.
+## 1.17 ngClass
+- dynamically adds or removes CSS classes.
+- same as ngStyle, takes a js object as input.
+- Object keys are CSS classes, values are expressions that evaluate to a boolean value indicating whether the class shoulf be applied or not.
+- `[ngClass]="{'online' : serverStatus === 'Online'}"`
+## 1.18 ngFor
+- replicates a DOM element based on an array.
+- `<app-server *ngFor="let server of servers"></app-server>`
+- Can also get current index:
+  ```html
+  <div *ngFor="let log of logArray; let i = index">
+  ```
