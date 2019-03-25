@@ -75,4 +75,4 @@ export class BetterHighlightDirective implements OnInit {
 
 }
 ```
-- (https://angular.io/api/core/Renderer2 "More about the renderer")
+- [More about the renderer](https://angular.io/api/core/Renderer2 "Angular API on Renderer2")
