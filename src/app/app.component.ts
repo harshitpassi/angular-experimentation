@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NumberSymbol } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +9,5 @@ export class AppComponent {
   numbers = [1, 2, 3, 4, 5];
   oddNumbers = this.numbers.filter(item => item % 2 !== 0);
   onlyOdd = false;
+  value = 1000;
 }
