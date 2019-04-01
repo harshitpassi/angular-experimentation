@@ -183,3 +183,20 @@ ngOnInit() {
     };
 }
 ```
+## 7. Fetching Route Parameters Reactively
+
+- If you are already on an initialized component and need to load something different in the route parameter, Angular will not re-instantiate the component and the data from the snapshot will not change. The address bar would be updated, but the new data will not be given to the component from the parameters.
+- there is another `ActivatedRoute.params` property that is an observable, and can be subscribed to.
+```ts
+    this.route.params.subscribe((params: Params) => {
+      this.user = {
+        id: params['id'],
+        name: params['name']
+      };
+    });
+```
+- the snapshot approach is still fine for initialization.
+- **IMPORTANT!** Angular automatically cleans up its own observable subscriptions whenever a component is destroyed. However, if you create your own observable, you should unsubscribe it in the ngOnDestroy method.
+
+## 8. Query Parameters and Fragments
+
