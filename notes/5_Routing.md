@@ -91,6 +91,95 @@ import { Routes, RouterModule } from '@angular/router';
   </div>
 ```
 
+## 3. Navigation Paths
 
+- With the `routerLink` directive, if you add a '/' it turns into an absolute path of type '<domain>/servers', but without a '/' it assumes it to be a relative path.
+- We can also use relative paths with './' in the beginning. We can also navigate as if we're inside a directory, with '../servers'. With '../' it doesn't just remove one segment from the path, but removes the currently loaded segment in its entirety.
 
+## 4. Styling Active router Links
 
+- we can use the `routerLinkActive` directive to pass in a class that would be applied to a router link when it is the active path.
+- By default `routerLinkActive` also applies the CSS class if the link includes the parent path of the current path, i.e.:
+
+```html
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <ul class="nav nav-tabs">
+        <li role="presentation" routerLinkActive="active"><a routerLink="/">Home</a></li>
+        <li role="presentation" routerLinkActive="active"><a routerLink="/servers">Servers</a></li>
+        <li role="presentation" routerLinkActive="active"><a [routerLink]="['/users']">Users</a></li>
+      </ul>
+    </div>
+  </div>
+```
+
+- This would apply the `active` class to Home as well as Users if you are on '/users'.
+- To fix this we would need to add a `routerLinkActiveOptions` directive:
+
+```html
+<li role="presentation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><a routerLink="/">Home</a></li>
+```
+
+## 5. Programmatic Navigation
+
+```html
+<button class="btn btn-primary" (click)="onLoadServers()">Load Servers</button>
+```
+
+```ts
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
+})
+export class HomeComponent implements OnInit {
+
+  constructor(private router: Router) { }
+
+  ngOnInit() {
+  }
+
+  onLoadServers() {
+    // complex calculation
+    this.router.navigate(['/servers']);
+  }
+
+}
+```
+
+- the `routerLink`directive always knows the current path, while `Router` does not, when it's inside the component. Any relative path given to `this.router.navigate` is only relative to the root domain itself.
+- in order to make it ruly relative, we need to pass the current path to the navigate method. We can do this by injecting the 'ActivatedRoute` route.
+```ts
+import { Router, ActivatedRoute } from '@angular/router';
+
+constructor(private serversService: ServersService, private router: Router, private route: ActivatedRoute) { }
+
+onReload() {
+    this.router.navigate(['servers'], {relativeTo: this.route});
+  }
+```
+
+## 6. Route Parameters
+
+- Can add paramters to a route using `/:param`, where param is the name of the parameter you want to retrieve.
+```ts
+const appRoutes: Routes = [
+  {path: '', component: HomeComponent},
+  {path: 'users', component: UsersComponent},
+  {path: 'users/:id', component: UserComponent},
+  {path: 'servers', component: ServersComponent}
+];
+```
+- the `:` tells Angular that this is the dynamic part of the path.
+- To retrieve route parameters, we can use the `snapshot.params` property of the ActivatedRoute:
+```ts
+ngOnInit() {
+    this.user = {
+      id: this.route.snapshot.params['id'],
+      name: this.route.snapshot.params['name']
+    };
+}
+```
