@@ -255,3 +255,40 @@ this.route.fragment.subscribe();
 ```
 
 - All the child components will be loaded inside the specified `router-outlet`.
+
+## 10. Handling Query Params
+
+- when navigating using the `Router.navigate()` method, we can pass another property in the extra properties that specifies how we want to handle our current query params when navigating to another component.
+- This is called `queryParamsHandling` and it takes the following values:
+  - `merge` : merge the current query params and add any new query params you're adding in this navigate call.
+  - `preserve` : only preserve current query params.
+
+```ts
+this.router.navigate(['edit'], {relativeTo: this.route, queryParamsHandling: 'preserve'});
+```
+## 11. Redirecting and Wildcard Routing
+
+### redirectTo
+
+- During route configuration, if we do not want to specify another component for a route, or want to redirect to another path, we can use the `redirectTo` property of a route.
+
+### Wildcard Route
+
+- We can also catch any paths that have not been specified in any route by using the `**` wildcard.
+- Routes are prarsed from top-to-bottom, so the `**` route should be the last one in the app.
+- If it was in the beginning, the app would always be redirected to `not-found`.
+
+```ts
+{path: 'not-found', component: PageNotFoundComponent},
+{path: '**', redirectTo: 'not-found'}
+```
+
+### Path Matching
+
+- By default, Angular always redirects using the prefix, so if you redirect a `''` path, you will always get redirected since every path would contain `/` in the beginning.
+- Angular basically checks whether a path starts with something that's a redirect and redirects by default.
+- to change this behavior, we cann add the `pathMatch: 'full'` property to the route. This will lead Angular to match the entire path.
+
+```ts
+{ path: '', redirectTo: '/somewhere-else', pathMatch: 'full' }
+```
