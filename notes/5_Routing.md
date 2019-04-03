@@ -200,3 +200,58 @@ ngOnInit() {
 
 ## 8. Query Parameters and Fragments
 
+- Query parameters - separated by '?' in the URL : `?id=1&name=Harshit`
+- Fragments - separated by '#' and used for navigating to certain portion in page (like Wikipedia)
+- While navigating, defined in the same options object used to specify `relativeTo` above:
+
+```ts
+this.router.navigate(['/servers', id, 'edit'], {queryParams: {allowEdit: '1'}, fragment: 'loading'});
+```
+
+- while retrieving, very similar to route parameters, with both snapshot and observables on `ActivatedRoute`.
+
+```ts
+console.log(this.route.snapshot.queryParams, this.route.snapshot.fragment);
+this.route.queryParams.subscribe();
+this.route.fragment.subscribe();
+```
+
+## 9. Nested Routes
+
+- Each route has a property named `children` which takes another array of routes.
+- Original route definitions:
+
+```ts
+{path: 'servers', component: ServersComponent},
+{path: 'servers/:id', component: ServerComponent},
+{path: 'servers/:id/edit', component: EditServerComponent}
+```
+
+- With `children`:
+
+```ts
+{ path: 'servers', component: ServersComponent, children: [
+    {path: ':id', component: ServerComponent},
+    {path: ':id/edit', component: EditServerComponent}
+  ]}
+```
+- With child routes, the child component is loaded inside the parent component.
+- Hence, there must be an outlet for the child component inside the parent component.
+- Parent servers component template
+
+```html
+<div class="row">
+    <div class="col-xs-12 col-sm-4">
+        <div class="list-group">
+            <a [routerLink]="['/servers', server.id]" [queryParams]="{ allowEdit: '1' }" fragment="loading" href="#" class="list-group-item" *ngFor="let server of servers">
+        {{ server.name }}
+      </a>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+```
+
+- All the child components will be loaded inside the specified `router-outlet`.
