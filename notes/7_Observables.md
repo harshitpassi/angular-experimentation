@@ -149,3 +149,14 @@ this.userActivationSubscription = this.usersService.userActivated.subscribe( (id
 ```ts
 const myNumbers = Observable.interval(1000).map( (data: number) => data * 2 ).filter( (data: number) => data % 10 !== 0 );
 ```
+
+## 6. rxjs 6 Syntax
+
+- All operators in rxjs 6 are passed through the pipe() method.
+
+```ts
+import { Observable, Observer, Subscription, interval } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
+
+const myNumbers = interval(1000).pipe(map( (data: number) => data * 2 )).pipe(filter( (data: number) => data % 10 !== 0 ));
+```
