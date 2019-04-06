@@ -292,3 +292,43 @@ this.router.navigate(['edit'], {relativeTo: this.route, queryParamsHandling: 'pr
 ```ts
 { path: '', redirectTo: '/somewhere-else', pathMatch: 'full' }
 ```
+
+## 12. Outsourcing Route Configuration
+
+- Typically the routing configuration is put in a separate app-routing module.
+- It is defined like so:
+```ts
+@NgModule({
+    imports: [
+        RouterModule.forRoot(appRoutes)
+    ],
+    exports: [
+        RouterModule
+    ]
+})
+export class AppRoutingModule {}
+```
+- Now we can simply add this to the imports of our app module.
+
+## 13. Routing Strategies
+
+- By default, the server hosting the Angular app must be configured to return the index.html file whenever there is a 404 error.
+- This is because, by default, the URL of the application is processes by the server, so in case the path is `/users` the server will look for a `users.html` file. Once it doesn't find it and redirects to `index.html`, the Angular router takes over.
+- This is the `PathLocationStrategy`.
+- In case the server is not configurable for this, or you need to support very old browsers that do not support HTML 5 browser history (i.e. they don't allow URLs to be parsed in the client), we would have to use the `HashLocationStrategy`, which puts a `#` between every route.
+- this can be enabled by passing `{useHash: true}` to the `forRoot` method in your `RouterModule`
+
+```ts
+@NgModule({
+    imports: [
+        RouterModule.forRoot(appRoutes, {useHash: true})
+    ],
+    exports: [
+        RouterModule
+    ]
+})
+export class AppRoutingModule {}
+```
+
+- The `#` informs the web server to only care about the portion of the URL before it, so it will always load index.html.
+- Example: `http://localhost:4200/#/servers`
